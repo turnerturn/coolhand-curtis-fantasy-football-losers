@@ -1,9 +1,15 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         * {
@@ -35,7 +41,7 @@
         }
 
         /* Container around content */
-        .container {
+        .container-timeline {
             padding: 10px 40px;
             position: relative;
             background-color: inherit;
@@ -43,7 +49,7 @@
         }
 
         /* The circles on the timeline */
-        .container::after {
+        .container-timeline::after {
             content: '';
             position: absolute;
             width: 25px;
@@ -116,14 +122,14 @@
             }
 
             /* Full-width containers */
-            .container {
+            .container-timeline {
                 width: 100%;
                 padding-left: 70px;
                 padding-right: 25px;
             }
 
             /* Make sure that all arrows are pointing leftwards */
-            .container::before {
+            .container-timeline::before {
                 left: 60px;
                 border: medium solid white;
                 border-width: 10px 10px 10px 0;
@@ -142,7 +148,9 @@
             }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -151,7 +159,110 @@
         <!-- script below will append timeline items here -->
     </div>
 
+    <!-- Accolade Modal -->
+    <div class="modal fade" id="accoladeModal" tabindex="-1" aria-labelledby="accoladeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="accoladeModalLabel">Create Accolade</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="yearInput">Year</label>
+                            <input type="text" class="form-control" id="yearInput" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="teamNameInput">Team Name</label>
+                            <input type="text" class="form-control" id="teamNameInput" placeholder="Team Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="ownerInput">Owner</label>
+                            <input type="text" class="form-control" id="ownerInput" placeholder="Owner">
+                        </div>
+                        <div class="form-group">
+                            <label for="imageUrlInput">Image URL</label>
+                            <input type="text" class="form-control" id="imageUrlInput" placeholder="Image URL">
+                        </div>
+                        <div class="form-group">
+                            <label for="quoteTextArea">Quote</label>
+                            <textarea class="form-control" id="quoteTextArea" placeholder="Quote"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-secondary" id="randomButton">Random</button>
+                        <button type="button" class="btn btn-primary" id="saveButton">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Instructions Modal -->
+    <div class="modal fade" id="instructionsModal" tabindex="-1" aria-labelledby="instructionsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="instructionsModalLabel">Commit Instructions</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>To commit these details to league history, follow the following instructions:</p>
+                    <ol>
+                        <li>Navigate to the GitHub repository at the following URL: <a
+                                href="https://github.com/turnerturn/coolhand-curtis-fantasy-football-losers"
+                                target="_blank">https://github.com/turnerturn/coolhand-curtis-fantasy-football-losers</a>
+                        </li>
+                        <li>Create a new account if you haven't already signed up for GitHub.</li>
+                        <li>Login with your GitHub account.</li>
+                        <li>Navigate to our repository's index.html at <a
+                                href="https://github.com/turnerturn/coolhand-curtis-fantasy-football-losers/blob/main/index.html"
+                                target="_blank">https://github.com/turnerturn/coolhand-curtis-fantasy-football-losers/blob/main/index.html</a>
+                        </li>
+                        <li>Click the edit icon aligned in the top right of the file's header panel.</li>
+                        <li>Find where we define our accolades JSON object by finding the instance of text "const
+                            accolades".</li>
+                        <li>Scroll through the lines following our accolades. This JSON array defines our timeline's
+                            accolades. Go to the bottom of this JSON array and add a comma to the last item and insert
+                            your intended details. (Example for appending item for the year of 2025 below.)</li>
+                    </ol>
+                    <pre id="instructionsCodeBlock">
+                        ....,
+                        {
+                            "year": 2024,
+                            "owner": "Aaron Grippando",
+                            "teamName": "A Grip",
+                            "memeUrl": "https://g.espncdn.com/lm-static/logo-packs/ffl/BoneHeads-ToddDetwiler/BoneHeads-01c.svg",
+                            "quote": "You’ve turned losing into an art form!"
+                        }
+                        , {
+                            "year": ${newAccolade.year},
+                            "owner": "${newAccolade.owner}",
+                            "teamName": "${newAccolade.teamName}",
+                            "memeUrl": "${newAccolade.imageUrl}",
+                            "quote": "${newAccolade.quote}"
+                        }
+
+                    </pre>
+                    <ol start="8">
+                        <li>Click Commit Changes (Green button on top right of the web interface).</li>
+                        <li>Navigate through the default options and prompts... (make sure to "Commit directly to the
+                            main branch").</li>
+                        <li>Our web page should be updated with your changes shortly. If help is needed, contact info is
+                            provided at <a href="https://github.com/turnerturn"
+                                target="_blank">https://github.com/turnerturn</a></li>
+                    </ol>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         const accoladeQuotes = [
@@ -276,20 +387,13 @@
                 "teamName": "A Grip",
                 "memeUrl": "https://g.espncdn.com/lm-static/logo-packs/ffl/BoneHeads-ToddDetwiler/BoneHeads-01c.svg",
                 "quote": "You’ve turned losing into an art form!"
-            },
-            {
-                "year": 2025,
-                "owner": "Unkown",
-                "teamName": "Unkown",
-                "memeUrl": "https://i.imgflip.com/26am.jpg",
-                "quote": "..."
             }
         ];
 
         const timeline = document.getElementById('timeline');
         accolades.forEach(accolade => {
             const container = document.createElement('div');
-            container.className = `container ${accolade.year % 2 === 0 ? 'right' : 'left'}`;
+            container.className = `container-timeline ${accolade.year % 2 === 0 ? 'right' : 'left'}`;
 
             const content = document.createElement('div');
             content.className = 'content';
@@ -322,7 +426,7 @@
         for (let year = 2015; year <= currentYear; year++) {
             if (!accolades.some(accolade => accolade.year === year)) {
                 const container = document.createElement('div');
-                container.className = `container ${year % 2 === 0 ? 'right' : 'left'}`;
+                container.className = `container-timeline ${year % 2 === 0 ? 'right' : 'left'}`;
 
                 const content = document.createElement('div');
                 content.className = 'content';
@@ -348,7 +452,84 @@
             console.log(`Accolade saved for year ${year}: ${teamName}, ${owner}, ${imageUrl}, ${quote}`);
             // Add logic to save the accolade and update the timeline
         }
+
+        function renderModal(year) {
+            $('#yearInput').val(year);
+            $('#accoladeModal').modal('show');
+
+            document.getElementById('randomButton').onclick = () => {
+                const randomIndex = Math.floor(Math.random() * accoladeQuotes.length);
+                document.getElementById('quoteTextArea').value = accoladeQuotes[randomIndex];
+            };
+
+            document.getElementById('saveButton').onclick = () => {
+                const quote = document.getElementById('quoteTextArea').value || accoladeQuotes[Math.floor(Math.random() * accoladeQuotes.length)];
+                savePlaqueAccolade(
+                    year,
+                    document.getElementById('teamNameInput').value,
+                    document.getElementById('ownerInput').value,
+                    document.getElementById('imageUrlInput').value,
+                    quote
+                );
+                $('#accoladeModal').modal('hide');
+                const newAccolade = {
+                    year: year,
+                    owner: document.getElementById('ownerInput').value,
+                    teamName: document.getElementById('teamNameInput').value,
+                    memeUrl: document.getElementById('imageUrlInput').value,
+                    quote: quote
+                };
+                document.getElementById('instructionsCodeBlock').textContent = `
+                    , {
+                        "year": 2024,
+                        "owner": "Aaron Grippando",
+                        "teamName": "A Grip",
+                        "memeUrl": "https://g.espncdn.com/lm-static/logo-packs/ffl/BoneHeads-ToddDetwiler/BoneHeads-01c.svg",
+                        "quote": "You’ve turned losing into an art form!"
+                    }
+                    ,{
+                        "year": ${newAccolade.year},
+                        "owner": "${newAccolade.owner}",
+                        "teamName": "${newAccolade.teamName}",
+                        "memeUrl": "${newAccolade.imageUrl}",
+                        "quote": "${newAccolade.quote}"
+                    }`;
+                $('#instructionsModal').modal('show');
+
+
+                const container = document.createElement('div');
+                container.className = `container-timeline ${year % 2 === 0 ? 'right' : 'left'}`;
+
+                const content = document.createElement('div');
+                content.className = 'content';
+
+                const yearElement = document.createElement('h2');
+                yearElement.className = 'accolade-year';
+                yearElement.textContent = year;
+
+                const meme = document.createElement('img');
+                meme.className = 'accolade-meme';
+                meme.src = newAccolade.memeUrl;
+
+                const namePlate = document.createElement('div');
+                namePlate.className = 'accolade-name-plate';
+                namePlate.innerHTML = `<strong>${newAccolade.teamName}</strong><br><small>${newAccolade.owner}</small>`;
+
+                const quoteElement = document.createElement('p');
+                quoteElement.textContent = newAccolade.quote;
+
+                content.appendChild(yearElement);
+                content.appendChild(meme);
+                content.appendChild(namePlate);
+                content.appendChild(quoteElement);
+                container.appendChild(content);
+                timeline.appendChild(container);
+            };
+        }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 
 </body>
 

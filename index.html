@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #474e5d;
+            font-family: Helvetica, sans-serif;
+        }
+
+        /* The actual timeline (the vertical ruler) */
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* The actual timeline (the vertical ruler) */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: white;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        /* Container around content */
+        .container {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+
+        /* The circles on the timeline */
+        .container::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: white;
+            border: 4px solid #FF9F55;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        /* Place the container to the left */
+        .left {
+            left: 0;
+        }
+
+        /* Place the container to the right */
+        .right {
+            left: 50%;
+        }
+
+        /* Add arrows to the left container (pointing right) */
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid white;
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent white;
+        }
+
+        /* Add arrows to the right container (pointing left) */
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid white;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent white transparent transparent;
+        }
+
+        /* Fix the circle for containers on the right side */
+        .right::after {
+            left: -16px;
+        }
+
+        /* The actual content */
+        .content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+        }
+
+        /* Media queries - Responsive timeline on screens less than 600px wide */
+        @media screen and (max-width: 600px) {
+
+            /* Place the timelime to the left */
+            .timeline::after {
+                left: 31px;
+            }
+
+            /* Full-width containers */
+            .container {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+
+            /* Make sure that all arrows are pointing leftwards */
+            .container::before {
+                left: 60px;
+                border: medium solid white;
+                border-width: 10px 10px 10px 0;
+                border-color: transparent white transparent transparent;
+            }
+
+            /* Make sure all circles are at the same spot */
+            .left::after,
+            .right::after {
+                left: 15px;
+            }
+
+            /* Make all right containers behave like the left ones */
+            .right {
+                left: 0%;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div class="timeline" id="timeline">
+        <!-- script below will append timeline items here -->
+    </div>
+
+
+
+    <script>
+        const accoladeQuotes = [
+            "I thought drafting a kicker in the first round was a bold strategy.",
+            "At least your fantasy team is consistent... consistently terrible.",
+            "Your fantasy football skills are as real as your team's championship hopes.",
+            "Remember, it's not whether you win or lose, but how badly you manage your team.",
+            "Your team name should be 'Bye Week' because everyone gets a win against you.",
+            "You put the 'fantasy' in fantasy football—your chances of winning were imaginary.",
+            "If there was a fantasy league for losing, you'd still come in last.",
+            "Your draft strategy should be featured on a 'What Not to Do' segment.",
+            "Even your bench players are asking for a trade.",
+            "You couldn't manage a fantasy team out of a paper bag.",
+            "If losing was an art, you’d be Picasso.",
+            "Your fantasy football advice is now officially banned in 12 states.",
+            "Your fantasy team is like a broken clock—right twice a season.",
+            "Your team gave up faster than a Madden player losing 21-0.",
+            "You made so many bad trades, even Wall Street is impressed.",
+            "Your team is proof that auto-drafting isn’t the worst strategy.",
+            "You’d have a better chance winning the lottery than winning this league.",
+            "Your players ghosted you harder than your last Tinder date.",
+            "You prepared for this season as well as the Jets prepare for the playoffs.",
+            "Your best player was your defense… and they still finished in last place.",
+            "Even an AI bot would’ve managed a better team than you.",
+            "Your team’s performance was so bad, ESPN sent you a sympathy card.",
+            "You drafted a player who retired two years ago… and still started them.",
+            "Your team name should be ‘Free Win’ because that’s what everyone gets against you.",
+            "You missed so many waiver claims, we started checking if you still had WiFi.",
+            "Even your backup QB demanded a trade.",
+            "You spent more time renaming your team than setting your lineup.",
+            "Your players were so bad, even the waterboys outscored them.",
+            "Fantasy football is about having fun… luckily, you gave everyone else plenty of laughs.",
+            "If fantasy football was graded, you’d be repeating the season.",
+            "Your fantasy team performed like a movie sequel—disappointing and unnecessary.",
+            "Your strategy was so confusing, even Bill Belichick couldn’t explain it.",
+            "Your season went downhill faster than a sled in a snowstorm.",
+            "Your team’s highlight of the season was a player’s retirement announcement.",
+            "Even your kicker told reporters he wanted off your team.",
+            "Your players set records—just not the ones you wanted.",
+            "Your draft picks were so bad, the NFL started drug-testing fantasy owners.",
+            "Your players' injury list was longer than a CVS receipt.",
+            "At least you didn’t spend any money on championship gear.",
+            "Your team was a perfect storm… of disappointment.",
+            "Your players celebrated touchdowns like they were rare events… because they were.",
+            "You were the first team mathematically eliminated… and it wasn’t even close.",
+            "Even the auto-draft feature felt bad for you.",
+            "Your bench outscored your starters more often than not.",
+            "Your team motto: ‘There’s always next year… maybe.’",
+            "Your team’s playoff hopes lasted about as long as a Snapchat message.",
+            "Your fantasy team is proof that miracles don’t happen every day.",
+            "Your league-mates thank you for making them look like geniuses.",
+            "If fantasy football had relegation, you’d be in a league with toddlers."
+        ];
+
+        const accolades = [
+            {
+                "year": 2015,
+                "owner": "Vince Fusco",
+                "teamName": "Kirk Cousin's Experience",
+                "memeUrl": "http://g.espncdn.com/s/ffllm/logos/StarWarsTheForceAwakens-ToddDetwiler/ESPN_Star_Wars_12a.svg",
+                "quote": "Last place: where legends are born... or something like that!"
+            },
+            {
+                "year": 2016,
+                "owner": "Bryan Ferguson",
+                "teamName": "T-Town Crab Boil",
+                "memeUrl": "https://s-media-cache-ak0.pinimg.com/236x/69/95/6c/69956c4a64ae10d2bb9712f0b0f58cb3.jpg",
+                "quote": "Congratulations! You’ve mastered the art of losing!"
+            },
+            {
+                "year": 2017,
+                "owner": "Paul Dozier",
+                "teamName": "HINGLE McCringleberry",
+                "memeUrl": "https://i.makeagif.com/media/9-17-2015/17b7Wk.gif",
+                "quote": "If at first you don't succeed, try losing again!"
+            },
+            {
+                "year": 2018,
+                "owner": "Curtis Werner",
+                "teamName": "Deflated Balls",
+                "memeUrl": "http://g.espncdn.com/s/ffllm/logos/Blockparty-RobbHars/blockplayers-11.svg",
+                "quote": "You’ve hit rock bottom, but at least the view is nice!"
+            },
+            {
+                "year": 2019,
+                "owner": "Bob Cotton",
+                "teamName": "Chips and Salsa",
+                "memeUrl": "https://g.espncdn.com/s/ffllm/logos/AtTheStadium-RobbHarskamp/At_The_Stadium_01.svg",
+                "quote": "Last place: because someone has to do it!"
+            },
+            {
+                "year": 2020,
+                "owner": "David Dickerson",
+                "teamName": "BA Charlie Foxtrot",
+                "memeUrl": "https://g.espncdn.com/lm-static/logo-packs/core/Solo/ESPN_Star_Wars_Mil_Falcon-01.svg",
+                "quote": "You’ve perfected the art of coming in last!"
+            },
+            {
+                "year": 2021,
+                "owner": "Jerry Smith",
+                "teamName": "Jett Pioneers",
+                "memeUrl": "https://fbb3.theobwl.com/html/images/kansas_city.jpg",
+                "quote": "Last place: where the fun never ends!"
+            },
+            {
+                "year": 2022,
+                "owner": "Matt Turner",
+                "teamName": "Turner Down For What",
+                "memeUrl": "https://g.espncdn.com/lm-static/logo-packs/ffl/CreepShow-ToddDetwiler/CreepShow-15a.svg",
+                "quote": "You’ve set a new standard for losing!"
+            },
+            {
+                "year": 2023,
+                "owner": "Jerry Smith",
+                "teamName": "Fine Time Lucilles",
+                "memeUrl": "https://g.espncdn.com/lm-static/logo-packs/core/BobsBurgers/Linda_OnModel.svg",
+                "quote": "Last place: because winning is overrated!"
+            },
+            {
+                "year": 2024,
+                "owner": "Aaron Grippando",
+                "teamName": "A Grip",
+                "memeUrl": "https://g.espncdn.com/lm-static/logo-packs/ffl/BoneHeads-ToddDetwiler/BoneHeads-01c.svg",
+                "quote": "You’ve turned losing into an art form!"
+            }
+        ];
+
+        const timeline = document.getElementById('timeline');
+        accolades.forEach(accolade => {
+            const container = document.createElement('div');
+            container.className = `container ${accolade.year % 2 === 0 ? 'right' : 'left'}`;
+
+            const content = document.createElement('div');
+            content.className = 'content';
+
+            const year = document.createElement('h2');
+            year.className = 'accolade-year';
+            year.textContent = accolade.year;
+
+            const meme = document.createElement('img');
+            meme.className = 'accolade-meme';
+            meme.src = accolade.memeUrl;
+
+            const namePlate = document.createElement('div');
+            namePlate.className = 'accolade-name-plate';
+            namePlate.innerHTML = `<strong>${accolade.teamName}</strong><br><small>${accolade.owner}</small>`;
+
+            const quote = document.createElement('p');
+            quote.textContent = accolade.quote;
+
+            content.appendChild(year);
+            content.appendChild(meme);
+            content.appendChild(namePlate);
+            content.appendChild(quote);
+            container.appendChild(content);
+            timeline.appendChild(container);
+        });
+
+        const currentYear = new Date().getFullYear();
+
+        for (let year = 2015; year <= currentYear; year++) {
+            if (!accolades.some(accolade => accolade.year === year)) {
+                const container = document.createElement('div');
+                container.className = `container ${year % 2 === 0 ? 'right' : 'left'}`;
+
+                const content = document.createElement('div');
+                content.className = 'content';
+
+                const yearElement = document.createElement('h2');
+                yearElement.className = 'accolade-year';
+                yearElement.textContent = year;
+
+                const button = document.createElement('button');
+                button.className = 'primary-button';
+                button.textContent = 'Add Accolade';
+                button.onclick = () => renderModal(year);
+
+                content.appendChild(yearElement);
+                content.appendChild(button);
+                container.appendChild(content);
+                timeline.appendChild(container);
+            }
+        }
+
+
+        function savePlaqueAccolade(year, teamName, owner, imageUrl, quote) {
+            console.log(`Accolade saved for year ${year}: ${teamName}, ${owner}, ${imageUrl}, ${quote}`);
+            // Add logic to save the accolade and update the timeline
+        }
+    </script>
+
+</body>
+
+</html>

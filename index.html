@@ -165,9 +165,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="accoladeModalLabel">Create Accolade</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
@@ -206,9 +204,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="instructionsModalLabel">Commit Instructions</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>To commit these details to league history, follow the following instructions:</p>
@@ -257,10 +253,7 @@
                                 target="_blank">https://github.com/turnerturn</a></li>
                     </ol>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
+
         </div>
     </div>
 
@@ -464,13 +457,7 @@
 
             document.getElementById('saveButton').onclick = () => {
                 const quote = document.getElementById('quoteTextArea').value || accoladeQuotes[Math.floor(Math.random() * accoladeQuotes.length)];
-                savePlaqueAccolade(
-                    year,
-                    document.getElementById('teamNameInput').value,
-                    document.getElementById('ownerInput').value,
-                    document.getElementById('imageUrlInput').value,
-                    quote
-                );
+
                 $('#accoladeModal').modal('hide');
                 const newAccolade = {
                     year: year,
@@ -491,39 +478,10 @@
                         "year": ${newAccolade.year},
                         "owner": "${newAccolade.owner}",
                         "teamName": "${newAccolade.teamName}",
-                        "memeUrl": "${newAccolade.imageUrl}",
+                        "memeUrl": "${newAccolade.memeUrl}",
                         "quote": "${newAccolade.quote}"
                     }`;
                 $('#instructionsModal').modal('show');
-
-
-                const container = document.createElement('div');
-                container.className = `container-timeline ${year % 2 === 0 ? 'right' : 'left'}`;
-
-                const content = document.createElement('div');
-                content.className = 'content';
-
-                const yearElement = document.createElement('h2');
-                yearElement.className = 'accolade-year';
-                yearElement.textContent = year;
-
-                const meme = document.createElement('img');
-                meme.className = 'accolade-meme';
-                meme.src = newAccolade.memeUrl;
-
-                const namePlate = document.createElement('div');
-                namePlate.className = 'accolade-name-plate';
-                namePlate.innerHTML = `<strong>${newAccolade.teamName}</strong><br><small>${newAccolade.owner}</small>`;
-
-                const quoteElement = document.createElement('p');
-                quoteElement.textContent = newAccolade.quote;
-
-                content.appendChild(yearElement);
-                content.appendChild(meme);
-                content.appendChild(namePlate);
-                content.appendChild(quoteElement);
-                container.appendChild(content);
-                timeline.appendChild(container);
             };
         }
     </script>
